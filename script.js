@@ -1,76 +1,59 @@
-// Variables de estado global para recordar valores entre operaciones
 let k = 0;
 let Ak, Bk, Alfa, Landa, Miu;
 
 function iniciarAlgoritmo() {
-    // Captura valores iniciales
     Ak = parseFloat(document.getElementById('Ak').value);
     Bk = parseFloat(document.getElementById('Bk').value);
     Alfa = parseFloat(document.getElementById('Alfa').value);
     k = 0;
 
-    if (isNaN(Ak) || isNaN(Bk) || isNaN(Alfa)) {
-        alert("Por favor rellena los valores iniciales");
-        return;
-    }
+    if (isNaN(Ak) || isNaN(Bk) || isNaN(Alfa)) return alert("Rellena los valores iniciales");
 
-    // Paso 1: Cálculo inicial
-    calcularLandaMiu();
-    
-    // Interfaz
+    // Paso 1: Cálculo inicial de Landa y Miu
+    Landa = Ak + (1 - Alfa) * (Bk - Ak);
+    Miu = Ak + Alfa * (Bk - Ak);
+
     document.getElementById('config-card').classList.add('hidden');
     document.getElementById('panel-operacion').classList.remove('hidden');
     actualizarPantalla();
-}
-
-function calcularLandaMiu() {
-    Landa = Ak + (1 - Alfa) * (Bk - Ak);
-    Miu = Ak + Alfa * (Bk - Ak);
-}
-
-function actualizarPantalla() {
-    document.getElementById('k-label').innerText = k;
-    document.getElementById('view-landa').innerText = Landa.toFixed(6);
-    document.getElementById('view-miu').innerText = Miu.toFixed(6);
 }
 
 function ejecutarIteracion() {
     const fLanda = parseFloat(document.getElementById('fLanda').value);
     const fMiu = parseFloat(document.getElementById('fMiu').value);
 
-    if (isNaN(fLanda) || isNaN(fMiu)) {
-        alert("Ingresa los valores de las funciones para evaluar");
-        return;
-    }
+    if (isNaN(fLanda) || isNaN(fMiu)) return alert("Ingresa los valores de la función");
 
-    let pasoAplicado = "";
+    let pasoLog = "";
 
-    // LÓGICA AUTOMÁTICA DE DECISIÓN
+    // LÓGICA DE HERENCIA CORREGIDA
     if (fLanda > fMiu) {
-        // --- PASO 2 ---
-        pasoAplicado = "Paso 2 (fL > fM)";
-        registrarEnTabla(fLanda, fMiu, pasoAplicado); // Guardamos k actual
+        pasoLog = "Paso 2";
+        registrarEnTabla(fLanda, fMiu, pasoLog);
 
-        Ak = Landa; // A_{k+1} = Landa_k
+        // Actualizamos límites
+        Ak = Landa; // El nuevo A es el Landa viejo
         // Bk se mantiene igual
-        Landa = Miu; // Landa_{k+1} = Miu_k
-        Miu = Ak + Alfa * (Bk - Ak); // Miu se recalcula
+        
+        // El nuevo Landa hereda el valor de Miu
+        Landa = Miu;
+        // Se calcula el nuevo Miu
+        Miu = Ak + Alfa * (Bk - Ak);
     } else {
-        // --- PASO 3 ---
-        pasoAplicado = "Paso 3 (fM > fL)";
-        registrarEnTabla(fLanda, fMiu, pasoAplicado); // Guardamos k actual
+        pasoLog = "Paso 3";
+        registrarEnTabla(fLanda, fMiu, pasoLog);
 
         // Ak se mantiene igual
-        Bk = Miu; // B_{k+1} = Miu_k
-        Landa = Ak + (1 - Alfa) * (Bk - Ak); // Landa se recalcula
-        Miu = Landa; // Miu_{k+1} = Landa_k
+        Bk = Miu; // El nuevo B es el Miu viejo
+        
+        // El nuevo Miu hereda el valor de Landa
+        Miu = Landa;
+        // Se calcula el nuevo Landa
+        Landa = Ak + (1 - Alfa) * (Bk - Ak);
     }
 
-    // Avanzamos iteración
     k++;
     actualizarPantalla();
-    
-    // Limpiar campos para la siguiente entrada
     document.getElementById('fLanda').value = "";
     document.getElementById('fMiu').value = "";
 }
@@ -78,7 +61,6 @@ function ejecutarIteracion() {
 function registrarEnTabla(fl, fm, paso) {
     const tabla = document.getElementById('cuerpo-tabla');
     const fila = document.createElement('tr');
-    
     fila.innerHTML = `
         <td>${k}</td>
         <td>${Ak.toFixed(6)}</td>
@@ -88,9 +70,13 @@ function registrarEnTabla(fl, fm, paso) {
         <td>${Miu.toFixed(6)}</td>
         <td>${fl.toFixed(6)}</td>
         <td>${fm.toFixed(6)}</td>
-        <td style="font-weight:bold; color:#2b6cb0">${paso}</td>
+        <td style="font-weight:bold; color:#3182ce">${paso}</td>
     `;
-    
-    // Insertar al inicio de la tabla para ver lo más reciente arriba
-    tabla.prepend(fila);
+    tabla.appendChild(fila);
+}
+
+function actualizarPantalla() {
+    document.getElementById('k-label').innerText = k;
+    document.getElementById('view-landa').innerText = Landa.toFixed(6);
+    document.getElementById('view-miu').innerText = Miu.toFixed(6);
 }

@@ -2,66 +2,63 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <title>Optimizador de Sección Áurea</title>
+    <title>Sección Áurea - Optimización</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <div class="main-container">
+    <div class="container">
         <h1>Búsqueda de la Sección Áurea</h1>
 
-        <!-- PASO 1: ENTRADA DE DATOS -->
         <div class="card" id="config-card">
-            <h3>Paso 1: Configuración Inicial</h3>
+            <h3>Configuración Inicial</h3>
             <div class="input-row">
                 <div class="field">
-                    <label>A<sub>k</sub> inicial</label>
+                    <label>A inicial</label>
                     <input type="number" id="Ak" step="any" placeholder="Ej: 0">
                 </div>
                 <div class="field">
-                    <label>B<sub>k</sub> inicial</label>
-                    <input type="number" id="Bk" step="any" placeholder="Ej: 1">
+                    <label>B inicial</label>
+                    <input type="number" id="Bk" step="any" placeholder="Ej: 10">
                 </div>
                 <div class="field">
                     <label>Alfa (α)</label>
-                    <input type="number" id="Alfa" step="any" placeholder="Ej: 0.618">
+                    <input type="number" id="Alfa" step="any" value="0.618">
                 </div>
             </div>
-            <button onclick="iniciarAlgoritmo()">Comenzar Proceso</button>
+            <button onclick="iniciarAlgoritmo()">Iniciar Proceso</button>
         </div>
 
-        <!-- PANEL DE OPERACIÓN AUTOMÁTICA -->
         <div id="panel-operacion" class="card hidden">
-            <h3>Iteración Actual: <span id="k-label">0</span></h3>
+            <h3>Iteración k = <span id="k-label">0</span></h3>
             <div class="valores-actuales">
-                <p>λ<sub>k</sub> = <span id="view-landa">0</span></p>
-                <p>μ<sub>k</sub> = <span id="view-miu">0</span></p>
+                <p>λₖ = <span id="view-landa">0</span></p>
+                <p>μₖ = <span id="view-miu">0</span></p>
             </div>
             
             <div class="evaluacion-box">
                 <p>Ingresa los resultados de la función:</p>
                 <div class="input-row">
-                    <input type="number" id="fLanda" placeholder="f(λk)" step="any">
-                    <input type="number" id="fMiu" placeholder="f(μk)" step="any">
+                    <input type="number" id="fLanda" placeholder="f(λₖ)" step="any">
+                    <input type="number" id="fMiu" placeholder="f(μₖ)" step="any">
                 </div>
                 <button class="btn-evaluar" onclick="ejecutarIteracion()">Evaluar y Seguir</button>
             </div>
         </div>
 
-        <!-- TABLA HISTÓRICA -->
         <div class="table-card">
             <h3>Historial de Operaciones</h3>
             <table id="tabla-log">
                 <thead>
                     <tr>
                         <th>k</th>
-                        <th>A<sub>k</sub></th>
-                        <th>B<sub>k</sub></th>
+                        <th>Aₖ</th>
+                        <th>Bₖ</th>
                         <th>B-A</th>
                         <th>λ</th>
                         <th>μ</th>
                         <th>f(λ)</th>
                         <th>f(μ)</th>
-                        <th>Paso Aplicado</th>
+                        <th>Paso</th>
                     </tr>
                 </thead>
                 <tbody id="cuerpo-tabla"></tbody>
